@@ -1,4 +1,6 @@
-#[derive(thiserror::Error, Debug)]
+use thiserror::Error;
+
+#[derive(Error, Debug)]
 pub enum Error {
     #[error("SMTP network error: {0}")]
     NetworkError(#[from] std::io::Error),
@@ -11,4 +13,10 @@ pub enum Error {
 
     #[error("data missing")]
     DataMissing,
+
+    #[error("invalid command")]
+    InvalidCommand,
+    
+    #[error("message too long")]
+    MessageTooLarge,
 }
