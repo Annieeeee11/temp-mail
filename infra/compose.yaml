@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  smtp-server:
+    build: ./smtp-server
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379
+      MAXIMUM_SIZE: 15728640
+    ports:
+      - "25:25"
+
+  apiServer:
+    build: ./apiServer
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379
+      FRONTEND_DOMAIN: https://yourdomain.com
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    restart: always
+    depends_on:
+      - apiServer
+    ports:
+      - "5173:5173"
+
+  caddy:
+    image: caddy:2
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - apiServer
+      - frontend
+
+volumes:
+  redis-data:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,18 @@
+// infra/caddyfile
+yourdomain.com {
+
+  encode gzip
+
+  route /api/* {
+    uri strip_prefix /api
+    reverse_proxy apiServer:3000
+  }
+
+  route /health {
+    reverse_proxy apiServer:3000
+  }
+
+  route {
+    reverse_proxy frontend:5173
+  }
+}

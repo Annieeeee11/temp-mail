@@ -1,3 +1,4 @@
+// crates/cores/src/error.rs
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -18,6 +19,8 @@ pub enum Error {
     InboxNotFound,
     #[error("Try again later")]
     RedisError,
+    #[error("Inbox full")]
+    InboxFull,
 }
 
 impl Error {
@@ -31,6 +34,7 @@ impl Error {
             Error::MessageTooLarge => 552,
             Error::InboxNotFound => 550,
             Error::RedisError => 451,
+            Error::InboxFull => 452,
         }
     }
 

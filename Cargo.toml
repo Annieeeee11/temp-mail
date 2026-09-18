@@ -1,5 +1,23 @@
 [workspace]
 members = [
-  "crates/core",
-  "crates/api-server"
-, "crates/crates/smtp-server", "crates/storage", "crates/worker"]
+    "crates/cores",
+    "crates/storage",
+    "crates/apiServer",
+    "crates/smtp-server"
+]
+resolver = "1"
+
+[workspace.dependencies]
+tokio = { version = "1.41.1", features = ["full"] }
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
+tokio-postgres = "0.7"
+chrono = "0.4.39"
+dotenv = "0.15"
+storage = { path = "crates/storage" }
+apiServer = { path = "crates/apiServer" }
+types = { path = "crates/types" }
+cores = { path = "crates/cores"}
+reqwest = { version = "0.12.23", features = ["json"] }
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
